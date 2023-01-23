@@ -1,0 +1,26 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Read in your CSV files using Pandas
+df1 = pd.read_csv("solanafloor_DGOD_tokenFloor_2023-01-22-13-35.csv")
+df2 = pd.read_csv("solanafloor_ABC_tokenFloor_2023-01-22-13-37.csv")
+
+# Convert the DataFrame index to datetime format
+df1.index = pd.to_datetime(df1['date'])
+df2.index = pd.to_datetime(df2['date'])
+
+# filter the dataframe to use only the values that are greater than or equal to the first date of the second dataframe
+start_date = df2.index[0]
+df1 = df1.loc[df1.index >= start_date]
+
+# Create a line graph of the data for SOL
+fig, ax = plt.subplots(1, 2, figsize=(15,5))
+ax[0].plot(df1.index, df1['DeGods SOL'], marker='o', linestyle='-', color='blue', label='DeGods SOL')
+ax[0].plot(df2.index, df2['ABC SOL'], marker='o', linestyle='-', color='red', label='ABC SOL')
+ax[0].set_xlabel('Date')
+ax[0].set_ylabel('Price in SOL')
+ax[0].set_title('Price Trends of SOL')
+ax[0].legend()
+
+ax[1].plot(df1.index, df1['DeGODS USD'], marker='o', linestyle='-', color='purple', label='DeGODS USD')
+ax[1].plot(df2.index, df2['ABC USD'], marker='o', linestyle='-', color='green', label='ABC USD')
